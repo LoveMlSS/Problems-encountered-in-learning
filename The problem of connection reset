@@ -1,0 +1,77 @@
+客户端代码：
+package Study;
+
+import java.io.*;
+import java.net.Socket;
+
+public class TCP {
+    public static void main(String[] args) throws IOException {
+        Socket socket = new Socket("127.0.0.1",8898);
+        OutputStream ops = socket.getOutputStream();
+        FileInputStream fis = new FileInputStream("D:\\youxi\\a.txt");
+        BufferedInputStream bis = new BufferedInputStream(fis);
+        byte[] b = new byte[1024];
+        int len = 0 ;
+        while ((len = bis.read(b))!=-1){
+            ops.write(b,0,len);
+        }
+        InputStream is = socket.getInputStream();
+        len = is.read(b);
+        socket.shutdownOutput();
+        System.out.println(new String(b,0,len));
+        bis.close();
+        fis.close();
+        ops.close();
+        socket.close();
+        }
+    }
+    
+    服务器代码：
+    package Study;
+
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class TCPServer {
+    public static void main(String[] args) throws IOException {
+        ServerSocket ss = new ServerSocket(8898);
+        Socket accept = ss.accept();
+        InputStream is = accept.getInputStream();
+        OutputStream op = accept.getOutputStream();
+        byte [] b = new byte[1024];
+        int len = 0 ;
+        FileOutputStream fos = new FileOutputStream("D\\youxi\\新建文件夹\\b.txt");
+        BufferedOutputStream bos = new BufferedOutputStream(fos);
+        while ((len = is.read(b))!= -1){
+            bos.write(b,0,len);
+        }
+        op.write("上传成功".getBytes());
+        op.close();
+        is.close();
+    }
+}
+package Study;
+
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class TCPServer {
+    public static void main(String[] args) throws IOException {
+        ServerSocket ss = new ServerSocket(8898);
+        Socket accept = ss.accept();
+        InputStream is = accept.getInputStream();
+        OutputStream op = accept.getOutputStream();
+        byte [] b = new byte[1024];
+        int len = 0 ;
+        FileOutputStream fos = new FileOutputStream("D\\youxi\\新建文件夹\\b.txt");
+        BufferedOutputStream bos = new BufferedOutputStream(fos);
+        while ((len = is.read(b))!= -1){
+            bos.write(b,0,len);
+        }
+        op.write("上传成功".getBytes());
+        op.close();
+        is.close();
+    }
+}
